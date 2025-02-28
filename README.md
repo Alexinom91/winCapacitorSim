@@ -1,5 +1,5 @@
 # winCapacitorSim
-# (only with Windows 11)
+# (only with Windows 10/11)
 
 This software performs calculations related to an RC (resistor-capacitor) circuit. It allows users to input various parameters and calculates the voltages during the charging and discharging phases of the circuit.
 
