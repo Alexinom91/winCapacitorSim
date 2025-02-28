@@ -42,5 +42,13 @@ This software performs calculations related to an RC (resistor-capacitor) circui
    ```sh
    git clone https://github.com/Alexinom91/winCapacitorSim.git
 
-
+2. Navigate to the project directory:
+   ```sh
+    cd winCapacitorSim
+4. Compile the code:
+   ```sh
+    compile.bat
+5. Run the executable:
+    ```sh
+    ./ciao.exe
 
