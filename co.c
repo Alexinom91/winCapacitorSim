@@ -1,15 +1,78 @@
 
 #include <math.h>
 #include <stdio.h>
+#ifdef _WIN32
 #include <windows.h>
 #include <wincon.h>
+#endif
 #include <stdlib.h>
 
+#ifdef __linux__
+    #define CLEAR() system("clear")
+#elif _WIN32
+    #define CLEAR() system("cls")
+#else
+    #define CLEAR() ((void)0)
+#endif
 
-void lecture(double *potGen, double *capCap,  double *freq,  double *resis, int *cicli);
-void Trcharge( double  Vg,  double vMin,  double *vMax,  double Ev);
-double partev(   double freq,  double resis,  double capCap);
-void TrDischarge( double *vMin,  double vMax , double Ev);
+#ifdef __linux__
+    #include <termios.h>
+    
+    static struct termios old, current;
+
+    
+    void initTermios(int echo) 
+    {
+    tcgetattr(0, &old); 
+    current = old; 
+    current.c_lflag &= ~ICANON; 
+    if (echo) 
+    {
+        current.c_lflag |= ECHO; 
+    }
+    else 
+    {
+        current.c_lflag &= ~ECHO; 
+    }
+    tcsetattr(0, TCSANOW, &current); 
+    }
+
+    
+    void resetTermios(void) 
+    {
+    tcsetattr(0, TCSANOW, &old);
+    }
+
+    
+    char getch_(int echo) 
+    {
+    char ch;
+    initTermios(echo);
+    ch = getchar();
+    resetTermios();
+    return ch;
+    }
+
+    char getch(void) 
+    {
+    return getch_(0);
+    }
+
+    #define GETCH() getch()
+
+#elif _WIN32
+    #define GETCH() system("pause>nul")
+#else
+    #define GETCH() ((void)0)
+#endif
+
+
+#define TYPE double
+
+void lecture(TYPE *potGen, TYPE *capCap,  TYPE *freq,  TYPE *resis, int *cicli);
+void Trcharge( TYPE  Vg,  TYPE vMin,  TYPE *vMax,  TYPE Ev);
+TYPE partev(   TYPE freq,  TYPE resis,  TYPE capCap);
+void TrDischarge( TYPE *vMin,  TYPE vMax , TYPE Ev);
 
 void clearInputBuffer()
 {
@@ -20,7 +83,7 @@ int main(void)
 {   
     
     //dichiaro le varibili
-    double potGen, potCap, capCap, freq, vMaxSt, vMinSt, cycle, resis, period, vMax, vMin, Ev, TAU;
+    TYPE potGen, potCap, capCap, freq, vMaxSt, vMinSt, cycle, resis, period, vMax, vMin, Ev, TAU;
     int i=0, cicli;
    
     
@@ -35,15 +98,15 @@ int main(void)
     
     //
     vMax=potGen;
-    vMin=( double)0;
+    vMin=( TYPE)0;
     for(i=0; i<cicli; i++)
     {   Trcharge( potGen,  vMin, &vMax,   Ev);
         TrDischarge(&vMin,  vMax , Ev);
     }
-    system("cls");
-    printf("Il delta dovrebbe essere di %.18Lf\n", ( double)vMax - vMin);
+    CLEAR();
+    printf("Il delta dovrebbe essere di %.18lf\n", ( TYPE)vMax - vMin);
     printf("vMax = %.18lf, vMin = %.18lf\n", vMax, vMin);
-    system("pause>nul");
+    GETCH();
 
 
    
@@ -51,11 +114,11 @@ int main(void)
     return 0;
 }
 
-void lecture(double *potGen, double *capCap, double *freq, double *resis, int *cicli)
+void lecture(TYPE *potGen, TYPE *capCap, TYPE *freq, TYPE *resis, int *cicli)
 {
     printf("Per tutte le misure che ti verranno richieste puoi inserire solo fino alla 16esima cifra decimale\n");
-    system("pause>nul");
-    system("cls");
+    GETCH();
+    CLEAR();
 
     printf("Inserisci la tensione in V massima con cui viene alimentato il condensatore con un'onda quadra periodica avente duty cycle di 1/2: ");
     if (scanf("%lf", potGen) != 1) {
@@ -86,25 +149,25 @@ void lecture(double *potGen, double *capCap, double *freq, double *resis, int *c
         printf("Errore nella lettura dei cicli.\n");
         clearInputBuffer();
     }
-	system("cls");
+	CLEAR();
     // Debug
     printf("Debug: potGen = %.18lf, capCap = %.18lf, freq = %.18lf, resis = %.18lf, cicli = %d\n", *potGen, *capCap, *freq, *resis, *cicli);
-    system("pause>nul");
+    GETCH();
 }
 
 
 
-void Trcharge(double  Vg, double vMin,  double *vMax,   double Ev)
+void Trcharge(TYPE  Vg, TYPE vMin,  TYPE *vMax,   TYPE Ev)
 {
-     double pass1, pass2, pass3 ;
-    pass1=(double)1-Ev;
+     TYPE pass1, pass2, pass3 ;
+    pass1=(TYPE)1-Ev;
     *vMax=Vg-vMin;
     *vMax=(*vMax)*pass1;
     *vMax=(*vMax)+(vMin);
     
     
 }
-void TrDischarge( double *vMin,  double vMax , double Ev)
+void TrDischarge( TYPE *vMin,  TYPE vMax , TYPE Ev)
 {
     
     *vMin=(vMax)*(Ev);
@@ -113,12 +176,12 @@ void TrDischarge( double *vMin,  double vMax , double Ev)
 }
 
 
-double partev(  double freq,  double resis,  double capCap)
-{   const  double E=2.71828182845904523536;
-    double pass1, pass2, pass3, Ev, TAU ;
+TYPE partev(  TYPE freq,  TYPE resis,  TYPE capCap)
+{   const  TYPE E=2.71828182845904523536;
+    TYPE pass1, pass2, pass3, Ev, TAU ;
     TAU=resis*capCap;
-    double period=( double)1/freq;
-    period=(double )period/2;
+    TYPE period=( TYPE)1/freq;
+    period=(TYPE )period/2;
     
 
     Ev = powl(E, -(period / TAU));

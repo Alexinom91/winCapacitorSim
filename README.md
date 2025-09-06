@@ -1,5 +1,5 @@
 # winCapacitorSim
-# (only with Windows 10/11)
+# Now It is working eather for Linux and Windoows
 
 This software performs calculations related to an RC (resistor-capacitor) circuit. It allows users to input various parameters and calculates the voltages during the charging and discharging phases of the circuit.
 
@@ -36,7 +36,7 @@ This software performs calculations related to an RC (resistor-capacitor) circui
 ### Partev Function
 - Calculates the exponential decay factor based on the period and time constant of the RC circuit.
 
-## Usage
+## Usage (for Windows)
 
 1. Clone the repository:
    ```sh
@@ -51,4 +51,22 @@ This software performs calculations related to an RC (resistor-capacitor) circui
 5. Run the executable:
     ```sh
     ./ciao.exe
+
+## Usage (for Linux)
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Alexinom91/winCapacitorSim.git
+
+2. Navigate to the project directory:
+   ```sh
+    cd winCapacitorSim
+4. Compile the code:
+   ```sh
+   chmod +x compile.sh
+    ./compile.sh
+5. Run the executable:
+    ```sh
+    ./ciao.exe
+
 

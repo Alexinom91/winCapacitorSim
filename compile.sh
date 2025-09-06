@@ -1,0 +1,1 @@
+gcc co.c -Wall -o ciao -lm 
