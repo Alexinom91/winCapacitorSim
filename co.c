@@ -83,7 +83,7 @@ int main(void)
 {   
     
     //dichiaro le varibili
-    TYPE potGen, potCap, capCap, freq, vMaxSt, vMinSt, cycle, resis, period, vMax, vMin, Ev, TAU;
+    TYPE potGen, capCap, freq, resis, vMax, vMin, Ev;
     int i=0, cicli;
    
     
@@ -159,7 +159,7 @@ void lecture(TYPE *potGen, TYPE *capCap, TYPE *freq, TYPE *resis, int *cicli)
 
 void Trcharge(TYPE  Vg, TYPE vMin,  TYPE *vMax,   TYPE Ev)
 {
-     TYPE pass1, pass2, pass3 ;
+     TYPE pass1;
     pass1=(TYPE)1-Ev;
     *vMax=Vg-vMin;
     *vMax=(*vMax)*pass1;
@@ -178,7 +178,7 @@ void TrDischarge( TYPE *vMin,  TYPE vMax , TYPE Ev)
 
 TYPE partev(  TYPE freq,  TYPE resis,  TYPE capCap)
 {   const  TYPE E=2.71828182845904523536;
-    TYPE pass1, pass2, pass3, Ev, TAU ;
+    TYPE Ev, TAU ;
     TAU=resis*capCap;
     TYPE period=( TYPE)1/freq;
     period=(TYPE )period/2;
